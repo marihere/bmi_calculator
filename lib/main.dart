@@ -1,4 +1,5 @@
 import 'dart:ffi';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 
@@ -136,8 +137,9 @@ class _MyHomePageState extends State<MyHomePage> {
                             if (_formKey.currentState!.validate()) {
                               bmi = double.parse(
                                   (double.parse(controller1.text) /
-                                          ((double.parse(controller.text) /
-                                                  100) *
+                                          pow(
+                                              (double.parse(controller.text) /
+                                                  100),
                                               2))
                                       .toStringAsFixed(2));
                               showWidget();
