@@ -1,7 +1,6 @@
-import 'dart:ffi';
 import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,14 +13,20 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'BMI Calculator',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          // textTheme: TextTheme(
-          //   decoration: InputDecoration(
-          //     contentPadding: EdgeInsets.symmetric(vertical: 40.0),
-          //   ),
-          // ),
+          textTheme: TextTheme(
+            bodyMedium: GoogleFonts.poppins(color: Colors.black, fontSize: 18),
+            bodySmall: GoogleFonts.poppins(color: Colors.black, fontSize: 15),
+            titleSmall: GoogleFonts.poppins(color: Colors.white, fontSize: 15),
           ),
-      home: const MyHomePage(title: 'Homepage'),
+          inputDecorationTheme: const InputDecorationTheme(
+              labelStyle: TextStyle(color: Colors.black),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                    style: BorderStyle.solid, color: Colors.pinkAccent),
+              ))),
+      home: const MyHomePage(title: 'BMI Calculator'),
     );
   }
 }
@@ -48,28 +53,34 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void whaat(double bmi) {
+  void hideWidget() {
+    setState(() {
+      viewVisible = false;
+    });
+  }
+
+  void bmiClassification(double bmi) {
     setState(() {
       if (bmi < 16.00) {
-        classification = "severely underweight";
+        classification = "'re severely underweight";
       }
       if (bmi >= 16.00 && bmi < 18.50) {
         classification = "underweight";
       }
       if (bmi >= 18.50 && bmi < 25.00) {
-        classification = "normal";
+        classification = "have an healthy weight";
       }
       if (bmi >= 25.00 && bmi < 30.00) {
-        classification = "overweight";
+        classification = "'re overweight";
       }
       if (bmi >= 30.00 && bmi < 35.00) {
-        classification = "obese (Type 1)";
+        classification = "'re obese (Type 1)";
       }
       if (bmi >= 35.00 && bmi < 40.00) {
-        classification = "obese (Type 2)";
+        classification = "'re obese (Type 2)";
       }
       if (bmi >= 40.00) {
-        classification = "obese (Type 3)";
+        classification = "'re obese (Type 3)";
       }
     });
   }
@@ -82,8 +93,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(centerTitle: true, title: Text(widget.title)),
+      appBar: AppBar(
+          backgroundColor: Colors.white,
+          shadowColor: const Color.fromARGB(25, 189, 189, 200),
+          centerTitle: true,
+          title: Text(
+            widget.title,
+            style: theme.textTheme.bodyMedium,
+          )),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -93,38 +112,48 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 50),
+                    const SizedBox(height: 50),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         SizedBox(
                             width: 150,
                             child: Column(children: [
-                              Text("Height (cm)"),
+                              Text("Height (cm)",
+                                  style: theme.textTheme.bodySmall),
                               TextFormField(
                                 keyboardType: TextInputType.number,
                                 controller: controller,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return 'Please enter a valid value';
+                                    hideWidget();
+                                    return 'Please enter a\nvalid value';
                                   }
                                   return null;
                                 },
+                                decoration: InputDecoration(
+                                    labelStyle:
+                                        theme.inputDecorationTheme.labelStyle),
                               )
                             ])),
                         SizedBox(
                             width: 150,
                             child: Column(children: [
-                              Text("Weight (kg)"),
+                              Text("Weight (kg)",
+                                  style: theme.textTheme.bodySmall),
                               TextFormField(
                                 keyboardType: TextInputType.number,
                                 controller: controller1,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return 'Please enter a valid value';
+                                    hideWidget();
+                                    return 'Please enter a\nvalid value';
                                   }
                                   return null;
                                 },
+                                decoration: InputDecoration(
+                                    labelStyle:
+                                        theme.inputDecorationTheme.labelStyle),
                               )
                             ])),
                       ],
@@ -143,10 +172,14 @@ class _MyHomePageState extends State<MyHomePage> {
                                               2))
                                       .toStringAsFixed(2));
                               showWidget();
-                              whaat(bmi!);
+                              bmiClassification(bmi!);
                             }
                           },
-                          child: const Text('Calculate!'),
+                          child: Text('Calculate!',
+                              style: theme.textTheme.titleSmall),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.pink[200],
+                          ),
                         ),
                       ),
                     ),
@@ -163,12 +196,10 @@ class _MyHomePageState extends State<MyHomePage> {
                               children: <Widget>[
                                 Text('Your BMI is $bmi',
                                     textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                        color: Colors.black, fontSize: 25)),
-                                Text('You\'re $classification',
+                                    style: theme.textTheme.bodyMedium),
+                                Text('You $classification',
                                     textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                        color: Colors.black, fontSize: 25))
+                                    style: theme.textTheme.bodyMedium)
                               ],
                             )),
                       ),
