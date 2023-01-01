@@ -1,6 +1,6 @@
 # BMI Calculator
 
-A BMI Calculator app written with Flutter.
+A BMI calculator app written with Flutter.
 
 <br>
 
