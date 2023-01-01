@@ -2,8 +2,8 @@
 
 A BMI Calculator app written with Flutter.
 
+<br>
 
 ### Preview Images
-![Screenshot 1](hhttps://github.com/marihere/bmi_calculator/blob/master/images/screenshot_1.png?raw=true)
-<br>
-![Screenshot 2](https://github.com/marihere/bmi_calculator/blob/master/images/screenshot_2.png?raw=true)
+<img align="left" alt="Screenshot 1" src="https://github.com/marihere/bmi_calculator/blob/master/images/screenshot_1.png" height="400" />
+<img align="center" alt="Screenshot 2" src="https://github.com/marihere/bmi_calculator/blob/master/images/screenshot_2.png" height="400" />
