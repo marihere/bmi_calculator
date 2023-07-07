@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,17 +16,29 @@ class MyApp extends StatelessWidget {
       title: 'BMI Calculator',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          textTheme: TextTheme(
-            bodyMedium: GoogleFonts.poppins(color: Colors.black, fontSize: 18),
-            bodySmall: GoogleFonts.poppins(color: Colors.black, fontSize: 15),
-            titleSmall: GoogleFonts.poppins(color: Colors.white, fontSize: 15),
+        textTheme: TextTheme(
+          displayMedium: GoogleFonts.poppins(
+              color: Colors.black, fontWeight: FontWeight.w500, fontSize: 24),
+          bodyMedium: GoogleFonts.poppins(color: Colors.black, fontSize: 32),
+          bodySmall: GoogleFonts.poppins(color: Colors.black, fontSize: 16),
+          titleSmall: GoogleFonts.poppins(
+              color: Colors.white, fontWeight: FontWeight.w400, fontSize: 20),
+        ),
+        inputDecorationTheme: const InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.black, width: 1.25),
           ),
-          inputDecorationTheme: const InputDecorationTheme(
-              labelStyle: TextStyle(color: Colors.black),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                    style: BorderStyle.solid, color: Colors.pinkAccent),
-              ))),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.green, width: 1.25),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.red, width: 1.25),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.red, width: 1.25),
+          ),
+        ),
+      ),
       home: const MyHomePage(title: 'BMI Calculator'),
     );
   }
@@ -44,43 +57,39 @@ class _MyHomePageState extends State<MyHomePage> {
   final controller = TextEditingController();
   final controller1 = TextEditingController();
   bool viewVisible = false;
-  double? bmi;
+  double bmi = 0;
   String classification = "error";
-
-  void showWidget() {
-    setState(() {
-      viewVisible = true;
-    });
-  }
-
-  void hideWidget() {
-    setState(() {
-      viewVisible = false;
-    });
-  }
+  Color? color;
 
   void bmiClassification(double bmi) {
     setState(() {
       if (bmi < 16.00) {
-        classification = "'re severely underweight";
+        classification = "are severely underweight";
+        color = Colors.blue[900];
       }
       if (bmi >= 16.00 && bmi < 18.50) {
-        classification = "underweight";
+        classification = "are underweight";
+        color = Colors.blue;
       }
       if (bmi >= 18.50 && bmi < 25.00) {
         classification = "have an healthy weight";
+        color = Colors.green;
       }
       if (bmi >= 25.00 && bmi < 30.00) {
-        classification = "'re overweight";
+        classification = "are overweight";
+        color = Colors.orange;
       }
       if (bmi >= 30.00 && bmi < 35.00) {
-        classification = "'re obese (Type 1)";
+        classification = "are obese (Type 1)";
+        color = Colors.orange[900];
       }
       if (bmi >= 35.00 && bmi < 40.00) {
-        classification = "'re obese (Type 2)";
+        classification = "are obese (Type 2)";
+        color = Colors.red;
       }
       if (bmi >= 40.00) {
-        classification = "'re obese (Type 3)";
+        classification = "are obese (Type 3)";
+        color = Colors.red[900];
       }
     });
   }
@@ -95,121 +104,204 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
           backgroundColor: Colors.white,
-          shadowColor: const Color.fromARGB(25, 189, 189, 200),
+          elevation: 0,
           centerTitle: true,
           title: Text(
             widget.title,
-            style: theme.textTheme.bodyMedium,
+            style: theme.textTheme.displayMedium,
           )),
-      body: SingleChildScrollView(
-        child: Center(
+      body: Center(
+        child: SingleChildScrollView(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Form(
                 key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    const SizedBox(height: 50),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        SizedBox(
-                            width: 150,
-                            child: Column(children: [
-                              Text("Height (cm)",
-                                  style: theme.textTheme.bodySmall),
-                              TextFormField(
-                                keyboardType: TextInputType.number,
-                                controller: controller,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    hideWidget();
-                                    return 'Please enter a\nvalid value';
-                                  }
-                                  return null;
-                                },
-                                decoration: InputDecoration(
-                                    labelStyle:
-                                        theme.inputDecorationTheme.labelStyle),
-                              )
-                            ])),
-                        SizedBox(
-                            width: 150,
-                            child: Column(children: [
-                              Text("Weight (kg)",
-                                  style: theme.textTheme.bodySmall),
-                              TextFormField(
-                                keyboardType: TextInputType.number,
-                                controller: controller1,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    hideWidget();
-                                    return 'Please enter a\nvalid value';
-                                  }
-                                  return null;
-                                },
-                                decoration: InputDecoration(
-                                    labelStyle:
-                                        theme.inputDecorationTheme.labelStyle),
-                              )
-                            ])),
-                      ],
-                    ),
-                    Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              bmi = double.parse(
-                                  (double.parse(controller1.text) /
-                                          pow(
-                                              (double.parse(controller.text) /
-                                                  100),
-                                              2))
-                                      .toStringAsFixed(2));
-                              showWidget();
-                              bmiClassification(bmi!);
-                            }
-                          },
-                          child: Text('Calculate!',
-                              style: theme.textTheme.titleSmall),
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.pink[200],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Center(
-                      child: Visibility(
-                        maintainSize: true,
-                        maintainAnimation: true,
-                        maintainState: true,
-                        visible: viewVisible,
-                        child: SizedBox(
-                            height: 100,
-                            width: 500,
-                            child: Column(
-                              children: <Widget>[
-                                Text('Your BMI is $bmi',
-                                    textAlign: TextAlign.center,
-                                    style: theme.textTheme.bodyMedium),
-                                Text('You $classification',
-                                    textAlign: TextAlign.center,
-                                    style: theme.textTheme.bodyMedium)
-                              ],
-                            )),
-                      ),
-                    ),
+                    SizedBox(
+                        width: 160,
+                        height: 200,
+                        child: Column(children: [
+                          Text("Height (cm)", style: theme.textTheme.bodySmall),
+                          const SizedBox(height: 20),
+                          TextFormField(
+                            keyboardType: TextInputType.number,
+                            controller: controller,
+                            validator: (value) {
+                              int intvalue = 0;
+                              if (value == null || value.isEmpty) {
+                                return 'Enter a valid\nvalue';
+                              }
+
+                              intvalue = int.parse(value);
+                              if (intvalue <= 0) {
+                                return 'Enter a positive\nnumber';
+                              }
+                              return null;
+                            },
+                            style: theme.textTheme.bodyMedium,
+                            decoration: InputDecoration(
+                                labelStyle:
+                                    theme.inputDecorationTheme.labelStyle),
+                          )
+                        ])),
+                    SizedBox(
+                        width: 160,
+                        height: 200,
+                        child: Column(children: [
+                          Text("Weight (kg)", style: theme.textTheme.bodySmall),
+                          const SizedBox(height: 20),
+                          TextFormField(
+                            keyboardType: TextInputType.number,
+                            controller: controller1,
+                            validator: (value) {
+                              int intvalue = 0;
+                              if (value == null || value.isEmpty) {
+                                return 'Enter a valid\nvalue';
+                              }
+
+                              intvalue = int.parse(value);
+                              if (intvalue <= 0) {
+                                return 'Enter a positive\nnumber';
+                              }
+                              return null;
+                            },
+                            style: theme.textTheme.bodyMedium,
+                            decoration: InputDecoration(
+                                labelStyle:
+                                    theme.inputDecorationTheme.labelStyle),
+                          )
+                        ])),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: Stack(
+        alignment: AlignmentDirectional.center,
+        children: [
+          Container(
+            width: double.infinity,
+            height: 100,
+            color: Colors.white,
+          ),
+          SizedBox(
+            height: 60,
+            width: 170,
+            child: ElevatedButton(
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  bmi = double.parse((double.parse(controller1.text) /
+                          pow((double.parse(controller.text) / 100), 2))
+                      .toStringAsFixed(2));
+                  bmiClassification(bmi);
+
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => BMIResult(
+                          bmi: bmi,
+                          classification: classification,
+                          color: color)));
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+              ),
+              child: Text('Calculate', style: theme.textTheme.titleSmall),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class BMIResult extends StatefulWidget {
+  const BMIResult(
+      {Key? key,
+      required this.bmi,
+      required this.classification,
+      required this.color})
+      : super(key: key);
+
+  final double bmi;
+  final String classification;
+  final Color? color;
+
+  @override
+  State<BMIResult> createState() => _BMIResultState();
+}
+
+class _BMIResultState extends State<BMIResult> {
+  @override
+  Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.black),
+      ),
+      body: Center(
+        child: SizedBox(
+            height: 400,
+            width: double.infinity,
+            child: Column(
+              children: [
+                Stack(alignment: AlignmentDirectional.center, children: [
+                  CircleAvatar(radius: 70, backgroundColor: widget.color),
+                  Text('${widget.bmi}',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.poppins(
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white)),
+                ]),
+                Padding(
+                  padding: const EdgeInsets.all(25),
+                  child: SfLinearGauge(
+                    maximum: 56,
+                    showLabels: false,
+                    ranges: <LinearGaugeRange>[
+                      LinearGaugeRange(
+                          startValue: 0, endValue: 16, color: Colors.blue[900]),
+                      const LinearGaugeRange(
+                          startValue: 16, endValue: 18.50, color: Colors.blue),
+                      const LinearGaugeRange(
+                          startValue: 18.51, endValue: 25, color: Colors.green),
+                      const LinearGaugeRange(
+                          startValue: 25.01,
+                          endValue: 30,
+                          color: Colors.orange),
+                      LinearGaugeRange(
+                          startValue: 30.01,
+                          endValue: 35,
+                          color: Colors.orange[900]),
+                      const LinearGaugeRange(
+                          startValue: 35.01, endValue: 40, color: Colors.red),
+                      LinearGaugeRange(
+                          startValue: 40.01,
+                          endValue: 56,
+                          color: Colors.red[900]),
+                    ],
+                    markerPointers: [
+                      LinearShapePointer(value: widget.bmi),
+                    ],
+                  ),
+                ),
+                Text('You ${widget.classification}',
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.bodySmall)
+              ],
+            )),
       ),
     );
   }
