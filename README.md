@@ -7,9 +7,9 @@ A simple BMI calculator app written with Flutter.
 <br>
 
 ## Table of contents
-1. [Installation](https://github.com/marihere/bmi_calculator#Installation)
-2. [Preview](https://github.com/marihere/bmi_calculator#Preview)
-3. [Unlicense](https://github.com/marihere/bmi_calculator#Unlicense)
+1. [Installation](https://github.com/marihere/bmi_calculator#installation)
+2. [Preview](https://github.com/marihere/bmi_calculator#preview)
+3. [Unlicense](https://github.com/marihere/bmi_calculator#unlicense)
 
 <br>
 
